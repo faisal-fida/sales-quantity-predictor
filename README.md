@@ -1,37 +1,45 @@
-# Predictive Analysis
+# sales-quantity-predictor
 
-This repository contains a set of scripts, notebooks, and data files for building and evaluating predictive models. The primary goal is to showcase different modeling techniques, including data preprocessing, feature engineering, model selection, and performance evaluation.
+Random forest regression that predicts the quantity sold on a sales invoice line, with a Streamlit form to try it.
 
 ## Features
-- Data cleaning and preparation steps
-- Multiple machine learning models for comparison
-- Model performance metrics and evaluation techniques
-- Example notebooks demonstrating usage and best practices
 
-## Getting Started
+- `predictive_analytics.py`: training script. Cleans an invoice spreadsheet, encodes and scales features, trains a `RandomForestRegressor`, shows a feature importance plot and saves `random_forest_model.pkl`.
+- `app.py`: Streamlit app with sidebar inputs (customer, salesman, amounts, item, territory, due date) and a Predict button that shows the predicted quantity.
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/faisal-fida/Predictive-Analysis.git
-   cd Predictive-Analysis
-   ```
-2. **Install Dependencies**  
-   Make sure you have Python 3.x installed, then install the packages listed in the requirements file:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Run Example Notebooks**  
-   Launch the notebooks (e.g., with Jupyter or VS Code) to explore and execute the code:
-   ```bash
-   jupyter notebook
-   ```
+## Tech stack
+
+Python, pandas, scikit-learn, Streamlit, matplotlib, category_encoders.
+
+## Project structure
+
+```
+app.py                     Streamlit app
+predictive_analytics.py    training script
+random_forest_model.pkl    trained model
+requirements.txt
+```
+
+## Setup and run
+
+1. `pip install -r requirements.txt` (the training script also needs `matplotlib`, `category_encoders` and `openpyxl`).
+2. Run the app: `streamlit run app.py`
+3. To retrain, place your invoice data as `data.xlsx` in the project folder (not included) and run `python predictive_analytics.py`.
+
+No environment variables are needed.
 
 ## Usage
-- Customize the dataset or configuration in the notebooks or scripts.
-- Run the training and evaluation scripts to generate models and view performance results.
 
-## Contributing
-Contributions are welcome. Feel free to open issues or create pull requests.
+Fill the sidebar fields and press Predict. The app shows the predicted quantity and its rounded value.
+
+## Status and limitations
+
+- The training data is not in the repo, so retraining needs your own `data.xlsx` with the original column names (CustNo, Salesman, Qty, and so on).
+- The app encodes and scales a single input row with fresh `LabelEncoder` and `MinMaxScaler` objects, so those values do not match the training transform. Predictions are not reliable.
+- The app passes 15 columns while the training script saves a model fitted on 9 reduced features, so the pickled model may reject the input. Not verified here.
+- The pickle file loads arbitrary code on open; only use a model you trust.
+- Demo quality, no tests, no accuracy figures are reported.
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+
+MIT
